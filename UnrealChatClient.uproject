@@ -7,7 +7,11 @@
 		{
 			"Name": "UnrealChatClient",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"SocketIOClient"
+			]
 		}
 	],
 	"Plugins": [
@@ -17,6 +21,11 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "SocketIOClient",
+			"Enabled": true,
+			"MarketplaceURL": "com.epicgames.launcher://ue/marketplace/slug/socket-io-client"
 		}
 	]
 }
