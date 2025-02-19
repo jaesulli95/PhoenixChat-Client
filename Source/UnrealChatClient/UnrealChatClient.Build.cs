@@ -14,6 +14,9 @@ public class UnrealChatClient : ModuleRules
 			"InputCore", 
 			"HeadMountedDisplay", 
 			"EnhancedInput",
-            "SocketIOClient"});
+            "SocketIOClient",
+			"SIOJson",
+			"SocketIOLib",
+			});
 	}
 }
