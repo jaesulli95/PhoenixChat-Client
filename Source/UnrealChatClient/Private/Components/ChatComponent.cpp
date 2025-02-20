@@ -26,7 +26,7 @@ void UChatComponent::OnMessageReceived(USIOJsonValue* PacketReceived)
 {
 	if (PacketReceived) {
 		FString MessageRecv = PacketReceived->AsObject()->GetStringField("message");
-		UE_LOG(LogTemp, Warning, TEXT("Message Received from the Chat Server: %s"), *MessageRecv);
+		MessageReceived.Broadcast(MessageRecv);
 	}
 }
 
@@ -38,6 +38,11 @@ void UChatComponent::BeginPlay()
 
 	//Setup Event Functions here
 	BindEventToFunction("OnMessageReceived", "OnMessageReceived", this);
+	BindEventToFunction("OnUserConnected", "OnUserConnected", this);
+
+
+
+	//Connect to the Chat Server after the events have been bound.
 	Connect(URLParams.AddressAndPort);
 	
 }
