@@ -17,7 +17,8 @@ enum class EMessageType : uint8 {
 	EMT_General,
 	EMT_Private,
 	EMT_Community,
-	EMT_Trade
+	EMT_Trade,
+	EMT_System
 };
 
 USTRUCT(BlueprintType)
@@ -25,8 +26,14 @@ struct FChannelData {
 	GENERATED_BODY()
 
 public:
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FString Name;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
 	FLinearColor ChannelColor;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	bool bIsTurnedOff = false;
 };
 
 
@@ -39,20 +46,27 @@ public:
 	// Sets default values for this component's properties
 	UChatComponent();
 
-	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly)
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Chat|Channels")
+	TMap<uint8, FChannelData> Channels;
+
+	UPROPERTY(BlueprintReadOnly, EditDefaultsOnly, Category="Chat|Data")
 	int32 MaxNumMessages = 75;
 
 	UFUNCTION(BlueprintCallable, Category="Chat")
 	void SendMessage(FString Message);
 
-
 	//Bound Functions
 	UFUNCTION()
 	void OnMessageReceived(USIOJsonValue* PacketReceived);
+	
+	UFUNCTION()
+	void OnUserConnected(USIOJsonValue* PacketReceived);
 
 	//Chat Event Delegates
 	UPROPERTY(BlueprintAssignable, Category="Chat|Events")
 	FOnMessageReceivedDelegate MessageReceived;
+
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

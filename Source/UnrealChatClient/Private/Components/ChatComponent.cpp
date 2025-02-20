@@ -16,8 +16,9 @@ UChatComponent::UChatComponent()
 
 void UChatComponent::SendMessage(FString Message)
 {
-	USIOJsonObject* Packet = NewObject<USIOJsonObject>();
 
+	//Parse the Message Command here then dissect it into something to send.
+	USIOJsonObject* Packet = NewObject<USIOJsonObject>();
 	Packet->SetStringField("message", Message);
 	Emit("on_message", USIOJsonValue::ConstructJsonValueObject(Packet, nullptr));
 }
@@ -27,6 +28,14 @@ void UChatComponent::OnMessageReceived(USIOJsonValue* PacketReceived)
 	if (PacketReceived) {
 		FString MessageRecv = PacketReceived->AsObject()->GetStringField("message");
 		MessageReceived.Broadcast(MessageRecv);
+	}
+}
+
+void UChatComponent::OnUserConnected(USIOJsonValue* PacketReceived)
+{
+	if (PacketReceived) {
+		USIOJsonObject* Packet = PacketReceived->AsObject();
+		
 	}
 }
 
@@ -44,5 +53,10 @@ void UChatComponent::BeginPlay()
 
 	//Connect to the Chat Server after the events have been bound.
 	Connect(URLParams.AddressAndPort);
-	
+	if (bIsConnected) {
+		MessageReceived.Broadcast("CONNECTED to Phoenix-Chat");
+	}
+	else {
+		MessageReceived.Broadcast("UNABLE to CONNECT to Phoenix-Chat");
+	}
 }
